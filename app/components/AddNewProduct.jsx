@@ -140,6 +140,7 @@ export default function AddNewProduct({ category }) {
             <div className="flex">
               <CldUploadWidget
                 uploadPreset="galya-baluvana-products"
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 onSuccess={(result, { widget }) => {
                   setResource((prevResource) => [
                     ...prevResource,
