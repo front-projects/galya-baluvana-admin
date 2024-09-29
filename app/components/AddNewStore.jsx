@@ -5,6 +5,8 @@ import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoCloseCircle } from 'react-icons/io5';
 import { newStore } from '../../lib/requests';
 import { useRouter } from 'next/navigation';
+import Select from 'react-select';
+import { customStyles } from './CustomSelect';
 
 export default function AddNewStore() {
   const [isEditing, setIsEditing] = useState();
@@ -13,6 +15,7 @@ export default function AddNewStore() {
     city: '',
     lat: '',
     lan: '',
+    open: false,
   });
   const router = useRouter();
 
@@ -24,6 +27,7 @@ export default function AddNewStore() {
         city: '',
         lat: '',
         lan: '',
+        open: false,
       });
       setIsEditing(false);
       router.refresh();
@@ -86,6 +90,17 @@ export default function AddNewStore() {
                   ...updatedValue,
                   lan: e.target.value,
                 })
+              }
+            />
+            <Select
+              placeholder="Open?"
+              options={[
+                { value: true, label: 'Open' },
+                { value: false, label: 'Open soon' },
+              ]}
+              styles={customStyles}
+              onChange={(option) =>
+                setUpdatedValue({ ...updatedValue, open: option.value })
               }
             />
           </div>

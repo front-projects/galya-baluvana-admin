@@ -9,6 +9,8 @@ import { deleteStore, updateStore } from '../../lib/requests';
 import { useState } from 'react';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoCloseCircle } from 'react-icons/io5';
+import Select from 'react-select';
+import { customStyles } from './CustomSelect';
 
 export default function StoreItem({ store }) {
   const router = useRouter();
@@ -100,13 +102,34 @@ export default function StoreItem({ store }) {
                     })
                   }
                 />
+                <Select
+                  placeholder="Open?"
+                  options={[
+                    { value: true, label: 'Open' },
+                    { value: false, label: 'Open soon' },
+                  ]}
+                  styles={customStyles}
+                  onChange={(option) =>
+                    setUpdatedValue({ ...updatedValue, open: option.value })
+                  }
+                />
               </div>
             ) : (
               <div className="flex flex-col gap-4 max-sm:flex-col text-[12px]">
                 <div>Address : {updatedValue.address}</div>
                 <div>City : {updatedValue.city}</div>
                 <div>Lat : {updatedValue.lat}</div>
-                <div>Lan {updatedValue.lan}</div>
+                <div>Lan : {updatedValue.lan}</div>
+                <div>
+                  Open:{' '}
+                  {updatedValue.open ? (
+                    <span className="text-green-600 font-bold text-xl">
+                      Yes
+                    </span>
+                  ) : (
+                    'Open soon'
+                  )}
+                </div>
               </div>
             )}
             {/* {category.nameUa} / {category.nameEn} */}
