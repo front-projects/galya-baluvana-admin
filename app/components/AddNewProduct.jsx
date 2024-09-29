@@ -48,6 +48,7 @@ export default function AddNewProduct({ category }) {
         coockingUa: '',
         images: '',
       });
+      setResource([]);
       setIsEditing(false);
       router.refresh();
     } else {
