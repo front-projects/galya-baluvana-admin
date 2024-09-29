@@ -54,11 +54,11 @@ export default function StoreItem({ store }) {
   return (
     <>
       <div>
-        <div className="border-2 rounded-xl p-4 hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw]">
-          <div>
+        <div className="border-2 rounded-xl p-4 hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw] h-full max-sm:flex-col">
+          <div className="w-full">
             {isEditing ? (
               <div
-                className="flex flex-col max-sm:flex-col gap-4"
+                className="flex flex-col gap-4 w-full"
                 onClick={(e) => e.stopPropagation()}
               >
                 <input

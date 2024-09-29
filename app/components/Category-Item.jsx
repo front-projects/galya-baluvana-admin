@@ -56,7 +56,7 @@ export default function CategoryItem({ category }) {
           <div>
             {isEditing ? (
               <div
-                className="flex max-sm:flex-col gap-4"
+                className="flex max-sm:flex-col gap-4 w-full"
                 onClick={(e) => e.stopPropagation()}
               >
                 <input

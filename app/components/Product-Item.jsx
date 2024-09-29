@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -9,6 +11,9 @@ import { deleteProduct, updateProduct } from '../../lib/requests';
 import { useState } from 'react';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoCloseCircle } from 'react-icons/io5';
+import { CldUploadWidget } from 'next-cloudinary';
+import { FaPlusCircle } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ProductItem({ product, category }) {
   const router = useRouter();
@@ -17,6 +22,9 @@ export default function ProductItem({ product, category }) {
   const deletedProduct = searchParams.get('product');
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(product);
+  const [resource, setResource] = useState(
+    value.images ? Object.values(value.images) : [],
+  );
   const [updatedValue, setUpdatedValue] = useState(value);
 
   //removing
@@ -35,33 +43,46 @@ export default function ProductItem({ product, category }) {
   //cancel edit
   const closeEditing = () => {
     setUpdatedValue(value);
+    setResource(Object.values(value.images));
     setIsEditing(false);
   };
 
   const confirmEditing = async () => {
-    const response = await updateProduct(category, updatedValue);
+    const images = resource.reduce((acc, url) => {
+      acc[uuidv4()] = url;
+      return acc;
+    }, {});
+    const response = await updateProduct(category, {
+      ...updatedValue,
+      images: images,
+    });
     if (response) {
       router.refresh();
-      setValue(updatedValue);
+      setValue({ ...updatedValue, images: images });
       setIsEditing(false);
     } else {
       alert('Error, try again later');
     }
   };
+  const removeImage = (image) => {
+    const updatedResource = [...resource].filter((el) => el !== image);
+    setResource(updatedResource);
+  };
 
   return (
     <>
       <div className="w-full">
-        <div className="border-2 rounded-xl p-4 hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw] h-full w-full">
-          <div>
+        <div className="border-2 rounded-xl p-4 hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw] h-full w-full  max-sm:flex-col">
+          <div className="w-full">
             {isEditing ? (
               <div
-                className="flex flex-col gap-4 w-[90%]"
+                className="flex flex-col gap-4 w-[90%] w-full"
                 onClick={(e) => e.stopPropagation()}
               >
                 <input
                   type="text"
                   className="w-full"
+                  placeholder="Name of product"
                   value={updatedValue.nameEn}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -72,6 +93,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <textarea
                   type="text"
+                  placeholder="Composition En"
                   value={updatedValue.compositionEn}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -82,6 +104,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <textarea
                   type="text"
+                  placeholder="Coocking En"
                   value={updatedValue.coockingEn}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -92,6 +115,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <input
                   type="text"
+                  placeholder="Назва українською"
                   value={updatedValue.nameUa}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -102,6 +126,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <textarea
                   type="text"
+                  placeholder="Склад продукту"
                   value={updatedValue.compositionUa}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -112,6 +137,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <textarea
                   type="text"
+                  placeholder="Спосіб приготування"
                   value={updatedValue.coockingUa}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -122,6 +148,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <input
                   type="text"
+                  placeholder="Price"
                   value={updatedValue.price}
                   onChange={(e) =>
                     setUpdatedValue({
@@ -130,6 +157,36 @@ export default function ProductItem({ product, category }) {
                     })
                   }
                 />
+                <h3>Images:</h3>
+                <div className="grid grid-cols-4 gap-2">
+                  <CldUploadWidget
+                    uploadPreset="galya-baluvana-products"
+                    onSuccess={(result, { widget }) => {
+                      setResource((prevResource) => [
+                        ...prevResource,
+                        result?.info.url,
+                      ]);
+                    }}
+                  >
+                    {({ open }) => {
+                      return (
+                        <button onClick={() => open()} className="text-[300%]">
+                          <FaPlusCircle />
+                        </button>
+                      );
+                    }}
+                  </CldUploadWidget>
+                  {resource &&
+                    resource.map((img) => (
+                      <img
+                        key={img}
+                        alt="image"
+                        src={img}
+                        className="w-[70px] h-[70px]"
+                        onClick={() => removeImage(img)}
+                      />
+                    ))}
+                </div>
               </div>
             ) : (
               <div className="flex gap-4 flex-col text-[12px] max-w-[100%] text-gray-400">
@@ -175,13 +232,25 @@ export default function ProductItem({ product, category }) {
                     {updatedValue.price}
                   </span>
                 </div>
+                <h3>Images:</h3>
+                <div className="grid grid-cols-4 gap-2">
+                  {updatedValue.images &&
+                    resource.map((img) => (
+                      <img
+                        key={img}
+                        alt="image"
+                        src={img}
+                        className="w-[70px] h-[70px]"
+                      />
+                    ))}
+                </div>
               </div>
             )}
             {/* {category.nameUa} / {category.nameEn} */}
           </div>
           {isEditing ? (
             <div
-              className="flex items-center gap-2 text-[250%] max-sm:flex-col"
+              className="flex items-center gap-2 text-[250%]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="text-green-600" onClick={confirmEditing}>
@@ -192,7 +261,7 @@ export default function ProductItem({ product, category }) {
               </div>
             </div>
           ) : (
-            <div className="flex gap-4 items-center max-sm:flex-col">
+            <div className="flex gap-4 items-center">
               <div
                 className="border-2 rounded-md p-2 flex items-center gap-2 hover:bg-gray-300/50"
                 onClick={(e) => {

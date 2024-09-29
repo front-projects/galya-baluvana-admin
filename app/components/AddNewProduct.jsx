@@ -7,6 +7,8 @@ import { IoCloseCircle } from 'react-icons/io5';
 import { newProduct } from '../../lib/requests';
 import { useRouter } from 'next/navigation';
 import { CldUploadWidget } from 'next-cloudinary';
+import { FaPlusCircle } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddNewProduct({ category }) {
   const [resource, setResource] = useState([]);
@@ -24,7 +26,17 @@ export default function AddNewProduct({ category }) {
   const router = useRouter();
 
   const confirmEditing = async () => {
-    const response = await newProduct(updatedValue, category);
+    const images = resource.reduce((acc, url) => {
+      acc[uuidv4()] = url;
+      return acc;
+    }, {});
+    const response = await newProduct(
+      {
+        ...updatedValue,
+        images: images,
+      },
+      category,
+    );
     if (response) {
       setUpdatedValue({
         nameEn: '',
@@ -53,7 +65,7 @@ export default function AddNewProduct({ category }) {
   };
 
   return (
-    <div className="border-2 rounded-md text-center hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw]">
+    <div className="border-2 rounded-md text-center hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw] max-sm:flex-col">
       {isEditing ? (
         <>
           <div
@@ -137,7 +149,8 @@ export default function AddNewProduct({ category }) {
                 })
               }
             />
-            <div className="flex">
+            <h3>Images:</h3>
+            <div className="grid grid-cols-4 gap-2">
               <CldUploadWidget
                 uploadPreset="galya-baluvana-products"
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -150,7 +163,9 @@ export default function AddNewProduct({ category }) {
               >
                 {({ open }) => {
                   return (
-                    <button onClick={() => open()}>Upload an Image</button>
+                    <button onClick={() => open()} className="text-[300%]">
+                      <FaPlusCircle />
+                    </button>
                   );
                 }}
               </CldUploadWidget>
@@ -160,14 +175,14 @@ export default function AddNewProduct({ category }) {
                     key={img}
                     alt="image"
                     src={img}
-                    className="w-[200px] h-[200px]"
+                    className="w-[70px] h-[70px]"
                     onClick={() => removeImage(img)}
                   />
                 ))}
             </div>
           </div>
           <div
-            className="flex items-center gap-2 text-[250%] p-4 max-[1080px]:flex-col "
+            className="flex items-center gap-2 text-[250%] p-4 "
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-green-600" onClick={confirmEditing}>

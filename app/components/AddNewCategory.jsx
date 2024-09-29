@@ -37,11 +37,11 @@ export default function AddNewCategory() {
   };
 
   return (
-    <div className="border-2 rounded-md text-center hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw]">
+    <div className="border-2 rounded-md text-center hover:bg-gray-600/40 flex gap-4 items-center justify-between cursor-pointer max-sm:w-[90vw] max-sm:flex-col">
       {isEditing ? (
         <>
           <div
-            className="flex flex-col gap-4 p-4"
+            className="flex flex-col gap-4 p-4 w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <input
@@ -87,7 +87,7 @@ export default function AddNewCategory() {
         </>
       ) : (
         <div
-          className="w-full text-center h-full p-4"
+          className="w-full text-center h-full flex items-center justify-center p-4"
           onClick={() => setIsEditing(true)}
         >
           Add New
