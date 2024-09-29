@@ -24,9 +24,9 @@ export default function CategoryItem({ category }) {
   const submitHandler = async () => {
     const response = await deleteCategory(deletedCategory);
     if (response) {
-      router.refresh();
+      router.back();
       setTimeout(() => {
-        router.back();
+        router.refresh();
       }, 200);
     } else {
       alert('Something went wrong, try again later');
