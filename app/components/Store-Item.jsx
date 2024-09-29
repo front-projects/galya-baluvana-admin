@@ -26,9 +26,9 @@ export default function StoreItem({ store }) {
   const submitHandler = async () => {
     const response = await deleteStore(deletedStore);
     if (response) {
-      router.refresh();
+      router.back();
       setTimeout(() => {
-        router.back();
+        router.refresh();
       }, 200);
     } else {
       alert('Something went wrong, try again later');

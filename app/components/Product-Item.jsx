@@ -32,9 +32,9 @@ export default function ProductItem({ product, category }) {
   const submitHandler = async () => {
     const response = await deleteProduct(category, deletedProduct);
     if (response) {
-      router.refresh();
+      router.back();
       setTimeout(() => {
-        router.back();
+        router.refresh();
       }, 200);
     } else {
       alert('Something went wrong, try again later');
