@@ -22,6 +22,7 @@ export default function AddNewProduct({ category }) {
     coockingEn: '',
     coockingUa: '',
     images: '',
+    mainImage: '',
   });
   const router = useRouter();
 
@@ -34,6 +35,9 @@ export default function AddNewProduct({ category }) {
       {
         ...updatedValue,
         images: images,
+        mainImage: updatedValue.mainImage
+          ? updatedValue.mainImage
+          : Object.values(updatedValue.images)[0],
       },
       category,
     );
@@ -46,6 +50,7 @@ export default function AddNewProduct({ category }) {
         compositionEn: '',
         coockingEn: '',
         coockingUa: '',
+        mainImage: '',
         images: '',
       });
       setResource([]);
@@ -172,13 +177,23 @@ export default function AddNewProduct({ category }) {
               </CldUploadWidget>
               {resource &&
                 resource.map((img) => (
-                  <img
+                  <div
                     key={img}
-                    alt="image"
-                    src={img}
-                    className="w-[70px] h-[70px]"
-                    onClick={() => removeImage(img)}
-                  />
+                    className={`w-[70px] h-[70px] rounded-md relative ${updatedValue.mainImage == img ? 'border-4 border-yellow-500' : ''}`}
+                  >
+                    <img
+                      alt="image"
+                      src={img}
+                      className={`w-full h-full`}
+                      onClick={() =>
+                        setUpdatedValue({ ...updatedValue, mainImage: img })
+                      }
+                      onDoubleClick={() => {
+                        setUpdatedValue({ ...updatedValue, mainImage: '' });
+                        removeImage(img);
+                      }}
+                    />
+                  </div>
                 ))}
             </div>
           </div>

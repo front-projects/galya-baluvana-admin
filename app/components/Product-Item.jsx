@@ -178,13 +178,23 @@ export default function ProductItem({ product, category }) {
                   </CldUploadWidget>
                   {resource &&
                     resource.map((img) => (
-                      <img
+                      <div
                         key={img}
-                        alt="image"
-                        src={img}
-                        className="w-[70px] h-[70px]"
-                        onClick={() => removeImage(img)}
-                      />
+                        className={`w-[70px] h-[70px] rounded-md relative ${updatedValue.mainImage == img ? 'border-4 border-yellow-500' : ''}`}
+                      >
+                        <img
+                          alt="image"
+                          src={img}
+                          className={`w-full h-full`}
+                          onClick={() =>
+                            setUpdatedValue({ ...updatedValue, mainImage: img })
+                          }
+                          onDoubleClick={() => {
+                            setUpdatedValue({ ...updatedValue, mainImage: '' });
+                            removeImage(img);
+                          }}
+                        />
+                      </div>
                     ))}
                 </div>
               </div>
@@ -236,12 +246,16 @@ export default function ProductItem({ product, category }) {
                 <div className="grid grid-cols-4 gap-2">
                   {updatedValue.images &&
                     resource.map((img) => (
-                      <img
+                      <div
                         key={img}
-                        alt="image"
-                        src={img}
-                        className="w-[70px] h-[70px]"
-                      />
+                        className={`w-[70px] h-[70px] rounded-md relative ${updatedValue.mainImage == img ? 'border-4 border-yellow-500' : ''}`}
+                      >
+                        <img
+                          alt="image"
+                          src={img}
+                          className={`w-full h-full`}
+                        />
+                      </div>
                     ))}
                 </div>
               </div>
