@@ -81,9 +81,14 @@ export default function CategoryItem({ category }) {
                 />
               </div>
             ) : (
-              <div className="flex gap-4 max-sm:flex-col text-[12px]">
+              <div className="flex gap-4 max-sm:flex-col text-[14px] sm:items-center">
                 <div>{updatedValue.nameEn}</div>
-                <div>{updatedValue.nameUa}</div>
+                <div>
+                  {updatedValue.nameUa}{' '}
+                  <span className="font-bold text-gray-600 text-[16px]">
+                    ({Object.values(category.products).length})
+                  </span>
+                </div>
               </div>
             )}
             {/* {category.nameUa} / {category.nameEn} */}

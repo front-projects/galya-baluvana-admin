@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { FaCircleArrowLeft } from 'react-icons/fa6';
 import { getProduct } from '../../../lib/requests';
-import AddNewProduct from '../../components/AddNewProduct';
-import ProductItem from '../../components/Product-Item';
+import FilterProducts from '../../components/FilterProduct';
 
 export default async function CategoryPage({ params }) {
   const product = await getProduct(params.category);
@@ -27,7 +26,8 @@ export default async function CategoryPage({ params }) {
         </h1>
       </div>
 
-      <div className="mt-6 grid grid-cols-3 max-lg:grid-cols-2 w-full max-sm:grid-cols-1 gap-2">
+      <FilterProducts products={list} category={params.category} />
+      {/* <div className="mt-6 grid grid-cols-3 max-lg:grid-cols-2 w-full max-sm:grid-cols-1 gap-2">
         <AddNewProduct category={params.category} />
         {list.map((product) => (
           <ProductItem
@@ -38,7 +38,7 @@ export default async function CategoryPage({ params }) {
             Product
           </ProductItem>
         ))}
-      </div>
+      </div> */}
     </>
   );
 }
