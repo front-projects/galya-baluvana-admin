@@ -3,6 +3,14 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
+  return await handleRefreshToken(req);
+}
+
+export async function POST(req) {
+  return await handleRefreshToken(req);
+}
+
+async function handleRefreshToken(req) {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get('refreshToken')?.value;
 
@@ -12,11 +20,12 @@ export async function GET(req) {
       headers: { 'Content-Type': 'application/json' },
     });
   }
+
   try {
     const token = await refreshSession(refreshToken);
     const accessExpiresAt = new Date(Date.now() + 50 * 60 * 1000);
 
-    cookieStore.set('accessToken', token, {
+    cookies().set('accessToken', token, {
       httpOnly: true,
       secure: true,
       expires: accessExpiresAt,
