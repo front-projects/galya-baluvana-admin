@@ -35,9 +35,10 @@ export default function AddNewProduct({ category }) {
       {
         ...updatedValue,
         images: images,
-        mainImage: updatedValue.mainImage
-          ? updatedValue.mainImage
-          : Object.values(updatedValue.images)[0],
+        mainImage:
+          updatedValue.mainImage !== ''
+            ? updatedValue.mainImage
+            : Object.values(updatedValue.images)[0],
       },
       category,
     );
