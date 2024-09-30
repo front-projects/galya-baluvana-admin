@@ -106,7 +106,7 @@ export default function ProductItem({ product, category }) {
                 />
                 <textarea
                   type="text"
-                  placeholder="Coocking En"
+                  placeholder="Cooking En"
                   value={updatedValue.coockingEn}
                   onChange={(e) =>
                     setUpdatedValue({
