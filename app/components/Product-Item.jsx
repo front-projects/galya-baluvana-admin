@@ -55,6 +55,8 @@ export default function ProductItem({ product, category }) {
     const response = await updateProduct(category, {
       ...updatedValue,
       images: images,
+      mainImage:
+        updatedValue.mainImage !== '' ? updatedValue.mainImage : resource[0],
     });
     if (response) {
       router.refresh();
