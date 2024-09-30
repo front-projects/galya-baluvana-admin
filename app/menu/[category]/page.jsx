@@ -22,7 +22,9 @@ export default async function CategoryPage({ params }) {
           <FaCircleArrowLeft />
           <div>Back</div>
         </Link>
-        <h1>{product.nameUa}</h1>
+        <h1>
+          {product.nameUa} / {product.nameEn}
+        </h1>
       </div>
 
       <div className="mt-6 grid grid-cols-3 max-lg:grid-cols-2 w-full max-sm:grid-cols-1 gap-2">
