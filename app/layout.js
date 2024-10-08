@@ -13,8 +13,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: 'Galya Baluvana Admin Panel',
-  description: 'GB Admin Panel',
+  title: 'Multicook Admin Panel',
+  description: 'Multicook Admin Panel',
 };
 
 export default function RootLayout({ children }) {
